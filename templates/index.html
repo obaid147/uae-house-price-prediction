@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dubai Home Price Estimator</title>
+<style>
+  :root {
+    --navy: #0F1B2B;
+    --navy-deep: #0A1420;
+    --gold: #C9A15C;
+    --cream: #EFEAE1;
+    --line: rgba(239,234,225,0.14);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color: var(--cream);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 48px 20px;
+  }
+  .wrap { width: 100%; max-width: 520px; }
+  .kicker {
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+  h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 34px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0 0 8px;
+  }
+  .sub {
+    color: rgba(239,234,225,0.65);
+    font-size: 15px;
+    margin: 0 0 36px;
+    line-height: 1.5;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .row { display: flex; gap: 16px; }
+  .row > div { flex: 1; }
+  label {
+    display: block;
+    font-size: 13px;
+    color: rgba(239,234,225,0.7);
+    margin-bottom: 6px;
+  }
+  input, select {
+    width: 100%;
+    padding: 12px 14px;
+    background: rgba(239,234,225,0.05);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--cream);
+    font-size: 15px;
+    font-family: inherit;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  select { appearance: none; cursor: pointer; }
+  button {
+    margin-top: 12px;
+    padding: 14px;
+    background: var(--gold);
+    color: var(--navy-deep);
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:hover { background: #d8b06e; }
+  .result {
+    margin-top: 32px;
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: rgba(201,161,92,0.06);
+  }
+  .result .label {
+    font-size: 13px;
+    color: rgba(239,234,225,0.65);
+    margin-bottom: 6px;
+  }
+  .result .price {
+    font-family: Georgia, serif;
+    font-size: 32px;
+    color: var(--gold);
+  }
+  .note {
+    margin-top: 10px;
+    font-size: 13px;
+    color: rgba(239,234,225,0.5);
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">UAE Property Estimator</div>
+  <h1>What's your Dubai home worth?</h1>
+  <p class="sub">Enter a few details and get an estimated sale price, based on over 5,000 real Dubai listings.</p>
+
+  <form method="POST" action="/predict">
+    <div class="row">
+      <div>
+        <label for="bedrooms">Bedrooms</label>
+        <input type="number" id="bedrooms" name="bedrooms" min="0" max="10" value="2" required>
+      </div>
+      <div>
+        <label for="bathrooms">Bathrooms</label>
+        <input type="number" id="bathrooms" name="bathrooms" min="0" max="10" value="2" required>
+      </div>
+    </div>
+
+    <div>
+      <label for="sizeMin">Size (sqft)</label>
+      <input type="number" id="sizeMin" name="sizeMin" min="1" value="1200" required>
+    </div>
+
+    <div>
+      <label for="area">Area</label>
+      <select id="area" name="area">
+        {% for a in areas %}
+        <option value="{{ a }}">{{ a }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label for="furnishing">Furnishing</label>
+      <select id="furnishing" name="furnishing">
+        <option value="NO">Unfurnished</option>
+        <option value="PARTLY">Partly furnished</option>
+        <option value="YES">Furnished</option>
+      </select>
+    </div>
+
+    <button type="submit">Estimate price</button>
+  </form>
+
+  {% if prediction %}
+  <div class="result">
+    <div class="label">Estimated price</div>
+    <div class="price">{{ prediction }}</div>
+    <div class="note">Based on comparable listings. Very large or unique properties may see wider variance.</div>
+  </div>
+  {% endif %}
+</div>
+</body>
+</html>
