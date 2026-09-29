@@ -23,7 +23,23 @@
     justify-content: center;
     padding: 48px 20px;
   }
-  .wrap { width: 100%; max-width: 520px; }
+  .wrap { width: 100%; max-width: 980px; }
+  .layout {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+  }
+  .form-col { flex: 1; min-width: 0; }
+  .result-col {
+    flex: 1;
+    min-width: 0;
+    position: sticky;
+    top: 48px;
+  }
+  @media (max-width: 800px) {
+    .layout { flex-direction: column; }
+    .result-col { position: static; }
+  }
   .kicker {
     font-size: 14px;
     color: var(--gold);
@@ -71,6 +87,10 @@
     border-color: var(--gold);
   }
   select { appearance: none; cursor: pointer; }
+  select option {
+    background: #1A2B42;
+    color: var(--cream);
+  }
   button {
     margin-top: 12px;
     padding: 14px;
@@ -84,7 +104,6 @@
   }
   button:hover { background: #d8b06e; }
   .result {
-    margin-top: 32px;
     padding: 24px;
     border: 1px solid var(--line);
     border-radius: 4px;
@@ -106,6 +125,25 @@
     color: rgba(239,234,225,0.5);
     line-height: 1.5;
   }
+  .errors {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid rgba(201,90,90,0.4);
+    border-radius: 4px;
+    background: rgba(201,90,90,0.08);
+  }
+  .errors .label {
+    font-size: 13px;
+    color: #E19999;
+    margin-bottom: 8px;
+  }
+  .errors ul {
+    margin: 0;
+    padding-left: 18px;
+    color: rgba(239,234,225,0.85);
+    font-size: 14px;
+    line-height: 1.6;
+  }
 </style>
 </head>
 <body>
@@ -114,21 +152,25 @@
   <h1>What's your Dubai home worth?</h1>
   <p class="sub">Enter a few details and get an estimated sale price, based on over 5,000 real Dubai listings.</p>
 
+  <div class="layout">
+  <div class="form-col">
   <form method="POST" action="/predict">
     <div class="row">
       <div>
         <label for="bedrooms">Bedrooms</label>
-        <input type="number" id="bedrooms" name="bedrooms" min="0" max="10" value="2" required>
+        <input type="number" id="bedrooms" name="bedrooms" min="0" max="15" step="1" value="2" required>
       </div>
       <div>
         <label for="bathrooms">Bathrooms</label>
-        <input type="number" id="bathrooms" name="bathrooms" min="0" max="10" value="2" required>
+        <input type="number" id="bathrooms" name="bathrooms" min="1" max="15" step="1" value="2" required
+               oninvalid="this.setCustomValidity('Enter at least 1 bathroom')"
+               oninput="this.setCustomValidity('')">
       </div>
     </div>
 
     <div>
       <label for="sizeMin">Size (sqft)</label>
-      <input type="number" id="sizeMin" name="sizeMin" min="1" value="1200" required>
+      <input type="number" id="sizeMin" name="sizeMin" min="100" max="50000" step="1" value="1200" required>
     </div>
 
     <div>
@@ -152,13 +194,33 @@
     <button type="submit">Estimate price</button>
   </form>
 
-  {% if prediction %}
-  <div class="result">
-    <div class="label">Estimated price</div>
-    <div class="price">{{ prediction }}</div>
-    <div class="note">Based on comparable listings. Very large or unique properties may see wider variance.</div>
+  {% if errors %}
+  <div class="errors">
+    <div class="label">Please fix the following</div>
+    <ul>
+      {% for e in errors %}
+      <li>{{ e }}</li>
+      {% endfor %}
+    </ul>
   </div>
   {% endif %}
+  </div>
+
+  <div class="result-col">
+    {% if prediction %}
+    <div class="result">
+      <div class="label">Estimated price</div>
+      <div class="price">{{ prediction }}</div>
+      <div class="note">Based on comparable listings. Very large or unique properties may see wider variance.</div>
+    </div>
+    {% else %}
+    <div class="result" style="opacity:0.5;">
+      <div class="label">Estimated price</div>
+      <div class="price" style="font-size:20px;">Fill the form and submit to see a price</div>
+    </div>
+    {% endif %}
+  </div>
+  </div>
 </div>
 </body>
 </html>
