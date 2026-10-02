@@ -159,11 +159,13 @@
     <div class="row">
       <div>
         <label for="bedrooms">Bedrooms</label>
-        <input type="number" id="bedrooms" name="bedrooms" min="0" max="15" step="1" value="2" required>
+        <input type="number" id="bedrooms" name="bedrooms" min="0" max="15" 
+                step="1" value="{{ form_data['bedrooms'] if form_data else 2 }}" required>
       </div>
       <div>
         <label for="bathrooms">Bathrooms</label>
-        <input type="number" id="bathrooms" name="bathrooms" min="1" max="15" step="1" value="2" required
+        <input type="number" id="bathrooms" name="bathrooms" min="1" max="15" 
+                step="1" value="{{ form_data['bathrooms'] if form_data else 2 }}" required
                oninvalid="this.setCustomValidity('Enter at least 1 bathroom')"
                oninput="this.setCustomValidity('')">
       </div>
@@ -171,14 +173,15 @@
 
     <div>
       <label for="sizeMin">Size (sqft)</label>
-      <input type="number" id="sizeMin" name="sizeMin" min="100" max="50000" step="1" value="1200" required>
+      <input type="number" id="sizeMin" name="sizeMin" min="100" max="50000" 
+              step="1" value="{{ form_data['sizeMin'] if form_data else 1200 }}" required>
     </div>
 
     <div>
       <label for="area">Area</label>
       <select id="area" name="area">
         {% for a in areas %}
-        <option value="{{ a }}">{{ a }}</option>
+          <option value="{{ a }}" {% if form_data and form_data['area'] == a %}selected{% endif %}>{{ a }}</option>
         {% endfor %}
       </select>
     </div>
@@ -186,9 +189,9 @@
     <div>
       <label for="furnishing">Furnishing</label>
       <select id="furnishing" name="furnishing">
-        <option value="NO">Unfurnished</option>
-        <option value="PARTLY">Partly furnished</option>
-        <option value="YES">Furnished</option>
+        <option value="NO" {% if form_data and form_data['furnishing'] == 'NO' %}selected{% endif %}>Unfurnished</option>
+        <option value="PARTLY" {% if form_data and form_data['furnishing'] == 'PARTLY' %}selected{% endif %}>Partly furnished</option>
+        <option value="YES" {% if form_data and form_data['furnishing'] == 'YES' %}selected{% endif %}>Furnished</option>
       </select>
     </div>
 

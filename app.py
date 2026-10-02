@@ -14,7 +14,7 @@ areas = sorted([col.replace('Area_', '') for col in model_columns if col.startsw
 
 @app.route('/')
 def home():
-    return render_template('index.html', areas=areas, prediction=None, errors=None)
+    return render_template('index.html', areas=areas, prediction=None, errors=None, form_data=None)
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -35,7 +35,7 @@ def predict():
         errors.append("Size must be between 100 and 50,000 sqft.")
 
     if errors:
-        return render_template('index.html', areas=areas, prediction=None, errors=errors)
+        return render_template('index.html', areas=areas, prediction=None, errors=errors, form_data=request.form)
 
     # Build a single row matching the model's expected columns, all zeros to start
     input_data = pd.DataFrame([[0] * len(model_columns)], columns=model_columns)
@@ -62,7 +62,7 @@ def predict():
 
     formatted_price = f"AED {predicted_price:,.0f}"
 
-    return render_template('index.html', areas=areas, prediction=formatted_price)
+    return render_template('index.html', areas=areas, prediction=formatted_price, errors=None, form_data=request.form)
 
 if __name__ == '__main__':
     app.run(debug=True)
