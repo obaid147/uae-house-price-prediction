@@ -4,7 +4,7 @@ Try it here :- https://uae-house-price-prediction.onrender.com/
 
 Project Overview
 
-Predicts Dubai property sale prices using a Random Forest model trained on 5,000+ real listings (bedrooms, bathrooms, size, location, furnishing). Deployed as a Flask web app so anyone can get an instant estimate.
+Predicts UAE property sale prices using a Random Forest model trained on 5,000+ real listings (bedrooms, bathrooms, size, location, furnishing). Deployed as a Flask web app so anyone can get an instant estimate.
 
 Approach
 Data Cleaning — handled missing values, fixed inconsistent text entries (e.g. "7+", "studio"), cleaned size field
