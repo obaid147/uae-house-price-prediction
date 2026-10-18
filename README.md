@@ -10,7 +10,8 @@ I built this project to practise the end-to-end machine-learning workflow: clean
 
 - Dataset: UAE Real Estate 2024 dataset from Kaggle
 - Data size: 5,000+ property listings
-- Model used in the app: Linear Regression & Random Forest
+- Models compared: Linear Regression and Random Forest
+- Deployed model: Random Forest
 - Web framework: Python, Flask
 - Front end: HTML, CSS
 - Deployment: Render
