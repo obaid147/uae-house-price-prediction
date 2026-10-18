@@ -1,26 +1,111 @@
-🔴 Live Demo
+# UAE House Price Prediction
 
-Try it here :- https://uae-house-price-prediction.onrender.com/
+A machine learning web application that estimates property sale prices using property features such as bedrooms, bathrooms, size, area, and furnishing status.
 
-Project Overview
+**[Try the Live Demo](https://uae-house-price-prediction.onrender.com/)**
 
-Predicts UAE property sale prices using a Random Forest model trained on 5,000+ real listings (bedrooms, bathrooms, size, location, furnishing). Deployed as a Flask web app so anyone can get an instant estimate.
+## Project Overview
 
-Approach
-Data Cleaning — handled missing values, fixed inconsistent text entries (e.g. "7+", "studio"), cleaned size field
-Feature Engineering — extracted neighborhood/area from address text, grouped into top 50 areas + "Other", one-hot encoded categoricals
-Log-Transformed Target — price data was heavily right-skewed (luxury listings up to 199M AED); log-transforming the target significantly improved model accuracy
-Models Trained & Compared:
-Model	MAE (AED)	R²
-Linear Regression	1,895,504	0.72
-Random Forest	1,582,773	0.76
-Deployment — Flask app with server + client-side input validation, deployed on Render
-Tech Stack
-Python, Pandas, NumPy, scikit-learn
-Flask, gunicorn
-Google Colab (training), Render (deployment)
-Dataset
+I built this project to practise the end-to-end machine-learning workflow: cleaning property data, engineering features, training and comparing models, and deploying a prediction web app.
 
-UAE Real Estate 2024 Dataset (Kaggle)
+- Dataset: UAE Real Estate 2024 dataset from Kaggle
+- Data size: 5,000+ property listings
+- Model used in the app: Linear Regression & Random Forest
+- Web framework: Python, Flask
+- Front end: HTML, CSS
+- Deployment: Render
 
-(Note: hosted on Render's free tier — the app may take ~30-60 seconds to wake up if it hasn't been visited recently.)
+## How It Works
+
+1. **Data cleaning:** handled missing values and inconsistent entries, including studio apartments and values such as `7+`.
+2. **Feature engineering:** extracted area names from addresses and grouped locations into the top 50 areas plus `Other`.
+3. **Categorical encoding:** converted area and furnishing categories into numeric features using one-hot encoding.
+4. **Target transformation:** applied a log transformation to property prices because the price distribution was strongly       right-skewed.
+5. **Model comparison:** evaluated Linear Regression and Random Forest.
+6. **Deployment:** served predictions through a Flask application hosted on Render.
+
+## Model Results
+
+| Model             | Mean Absolute Error (AED) | R² Score |
+| Linear Regression | 1,895,504                 | 0.72     |
+| Random Forest     | 1,582,773                 | 0.76     |
+
+The Random Forest model performed better on these evaluation metrics. The MAE is still relatively high, so predictions should be treated as estimates rather than official valuations.
+
+## Tech Stack
+
+- Python
+- Pandas and NumPy
+- scikit-learn
+- Flask
+- Joblib
+- HTML
+- CSS
+- Gunicorn
+- Google Colab for model training
+- Render for deployment
+- GitHub for version control
+
+## Run Locally
+
+1. Clone this repository:
+
+   ```bash
+   git clone https://github.com/obaid147/uae-house-price-prediction.git
+   cd uae-house-price-prediction
+   ```
+
+2. Create and activate a virtual environment (recommended).
+
+   **Windows:**
+
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\activate
+   ```
+
+   **macOS/Linux:**
+
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate
+   ```
+
+3. Install the dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Start the app:
+
+   ```bash
+   python app.py
+   ```
+
+5. Open the local URL shown in the terminal, usually `http://127.0.0.1:5000/`.
+
+## Repository Structure
+
+```text
+├── app.py                         # Flask application and prediction logic
+├── house_price_model.pkl          # Saved trained model
+├── model_columns.pkl              # Expected model input columns
+├── requirements.txt               # Python dependencies
+├── Procfile                       # Gunicorn startup command for deployment
+├── templates/
+│   └── index.html                 # Web page template
+├── static/                        # Static assets
+└── uae_house_price_prediction.ipynb # Data preparation and model training notebook
+```
+
+## Limitations
+
+- The model is only as reliable as the dataset and features used to train it.
+- Property prices can change over time and vary substantially within the same area.
+- The result is a machine-learning estimate, not a formal property valuation.
+
+## Links
+
+- **Live app:** https://uae-house-price-prediction.onrender.com/
+- **GitHub repository:** https://github.com/obaid147/uae-house-price-prediction
